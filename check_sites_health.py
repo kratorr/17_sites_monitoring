@@ -29,14 +29,14 @@ def get_domain_expiration_date(domain_name):
 if __name__ == "__main__":
     try:
         file_path = sys.argv[1]
-        if  os.path.isfile(file_path):
+        if os.path.isfile(file_path):
             urls_list = load_urls4check(file_path)
             for url in urls_list:
                 avaliable_server = is_server_respond_with_200(url)
                 expiration_date = get_domain_expiration_date(url)
                 now_date = datetime.datetime.now()
-                delta_beteen_2_dates = expiration_date - now_date
-                day_delta = delta_beteen_2_dates.days
+                delta_between_2_dates = expiration_date - now_date
+                day_delta = delta_between_2_dates.days
                 print("URL:", url)
                 if avaliable_server:
                     print("[OK] Server is avaliavle")
