@@ -2,7 +2,6 @@ import requests
 import whois #python-whois
 import datetime
 import sys
-import os
 
 
 def load_urls4check(path):
@@ -13,41 +12,43 @@ def load_urls4check(path):
 
 def is_server_respond_with_200(url):
     try:
-        request = requests.get(url)
-        if request.status_code == 200:
+        response = requests.get(url)
+        if response.ok:
             return True
-    except:
+    except requests.ConnectionError:
         return False
 
 
-def get_domain_expiration_date(domain_name):
+def get_domain_expiration_date(domain_name, days=30):
     whois_info = whois.whois(domain_name)
     expiration_date = whois_info.expiration_date
-    return expiration_date
+    delta_between_2_dates = expiration_date - datetime.datetime.now()
+    days_delta = delta_between_2_dates.days
+    if days_delta > days:
+        return True
+    else:
+        return False
 
 
 if __name__ == "__main__":
     try:
         file_path = sys.argv[1]
-        if os.path.isfile(file_path):
-            urls_list = load_urls4check(file_path)
-            for url in urls_list:
-                avaliable_server = is_server_respond_with_200(url)
-                expiration_date = get_domain_expiration_date(url)
-                now_date = datetime.datetime.now()
-                delta_between_2_dates = expiration_date - now_date
-                day_delta = delta_between_2_dates.days
-                print("URL:", url)
-                if avaliable_server:
-                    print("[OK] Server is avaliavle")
-                else:
-                    print("[X] Server is not avaliable")
-                if day_delta < 30:
-                    print("[X] Expiration date is less than a month")
-                elif day_delta > 30:
-                    print("[OK] Expiration date is more than a month")
-                print()
-        else:
-            print("File not found")
+        urls_list = load_urls4check(file_path)
+        for url in urls_list:
+            server_availability = is_server_respond_with_200(url)
+            expiration_date = get_domain_expiration_date(url)
+            print(expiration_date)
+            print("URL:", url)
+            if server_availability:
+                print("[OK] Server is avaliavle")
+            else:
+                print("[X] Server is not avaliable")
+            if expiration_date:
+                print("[OK] Expiration date is more than a month")
+            else:
+                print("[X] Expiration date is less than a month")
+            print()
     except IndexError:
         print("Arguments error")
+    except FileNotFoundError:
+        print("File not found")
