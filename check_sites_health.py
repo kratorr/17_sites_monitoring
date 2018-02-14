@@ -34,21 +34,24 @@ if __name__ == "__main__":
     try:
         file_path = sys.argv[1]
         urls_list = load_urls4check(file_path)
-        for url in urls_list:
-            server_availability = is_server_respond_with_200(url)
-            expiration_date = get_domain_expiration_date(url)
-            print(expiration_date)
-            print("URL:", url)
-            if server_availability:
-                print("[OK] Server is avaliavle")
-            else:
-                print("[X] Server is not avaliable")
-            if expiration_date:
-                print("[OK] Expiration date is more than a month")
-            else:
-                print("[X] Expiration date is less than a month")
-            print()
+
     except IndexError:
         print("Arguments error")
+        sys.exit()
     except FileNotFoundError:
         print("File not found")
+        sys.exit()
+    for url in urls_list:
+        server_availability = is_server_respond_with_200(url)
+        expiration_date = get_domain_expiration_date(url)
+        print(expiration_date)
+        print("URL:", url)
+        if server_availability:
+            print("[OK] Server is avaliavle")
+        else:
+            print("[X] Server is not avaliable")
+        if expiration_date:
+            print("[OK] Expiration date is more than a month")
+        else:
+            print("[X] Expiration date is less than a month")
+        print()
