@@ -10,35 +10,29 @@ def load_urls4check(path):
     return urls_list
 
 
-def is_server_respond_with_200(url):
+def is_server_respond_with_ok(url):
     try:
         response = requests.get(url)
-        if response.ok:
-            return True
+        return response.ok
     except requests.ConnectionError:
         return False
 
 
-def get_domain_expiration_date(domain_name, days=30):
+def check_domain_expiration_date(domain_name, days=30):
     whois_info = whois.whois(domain_name)
     expiration_date = whois_info.expiration_date
+    if type(expiration_date) == list:
+        expiration_date = min(expiration_date)
     delta_between_2_dates = expiration_date - datetime.datetime.now()
     days_delta = delta_between_2_dates.days
-    if days_delta > days:
-        return True
-    else:
-        return False
+    return days_delta > days
+
 
 def print_site_status(url, server_availability, expiration_date):
     print("URL:", url)
-    if server_availability:
-        print("[OK] Server is avaliavle")
-    else:
-        print("[X] Server is not avaliable")
-    if expiration_date:
-        print("[OK] Expiration date is more than a month")
-    else:
-        print("[X] Expiration date is less than a month")
+    status_string = lambda check: "[OK]" if check else "[X]"
+    print("{} Server is avaliable".format(status_string(server_availability)))
+    print("{} Expiration date is more than a month".format(status_string(expiration_date)))
     print()
 
 
@@ -47,12 +41,10 @@ if __name__ == "__main__":
         file_path = sys.argv[1]
         urls_list = load_urls4check(file_path)
     except IndexError:
-        print("Arguments error")
-        sys.exit()
+        sys.exit("Arguments error")
     except FileNotFoundError:
-        print("File not found")
-        sys.exit()
+        sys.exit("File not found")
     for url in urls_list:
-        server_availability = is_server_respond_with_200(url)
-        expiration_date = get_domain_expiration_date(url)
+        server_availability = is_server_respond_with_ok(url)
+        expiration_date = check_domain_expiration_date(url)
         print_site_status(url, server_availability, expiration_date)

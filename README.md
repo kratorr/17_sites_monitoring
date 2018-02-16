@@ -22,19 +22,15 @@ Example of script launch on Linux, Python 3.5:
 ```bash
 $ python3 check_sites_health.py sites.txt 
 URL: https://yandex.ru/
-[OK] Server is avaliavle
+[OK] Server is avaliable
 [OK] Expiration date is more than a month
 
 URL: https://pikabu.ru/
-[OK] Server is avaliavle
+[OK] Server is avaliable
 [OK] Expiration date is more than a month
 
-URL: https://www.google.ru/
-[OK] Server is avaliavle
-[OK] Expiration date is more than a month
-
-URL: http://www.kratorr.com/
-[X] Server is not avaliable
+URL: https://www.google.ru/dsada
+[X] Server is avaliable
 [OK] Expiration date is more than a month
 ```
 
