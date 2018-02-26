@@ -30,8 +30,10 @@ def check_domain_expiration_date(domain_name, days=30):
 
 def print_site_status(url, server_availability, expiration_date):
     print("URL:", url)
-    print("{} Server is avaliable".format("[OK]" if server_availability else "[X]"))
-    print("{} Expiration date is more than a month".format("[OK]" if expiration_date else "[X]"))
+    print("{} Server is avaliable".format(
+            "[OK]" if server_availability else "[X]"))
+    print("{} Expiration date is more than a month".format(
+            "[OK]" if expiration_date else "[X]"))
     print()
 
 
