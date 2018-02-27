@@ -14,9 +14,17 @@ Remember, it is recommended to use virtualenv/venv for better isolation.
 
 The program must be run using the console, the required argument is the file with urls.
 
+
 How to run:
 ```bash
 $ python3 check_sites_health.py <file_path>
+```
+Example of urls file:
+```bash
+$ cat sites.txt
+https://yandex.ru/
+https://pikabu.ru/
+https://www.google.ru/dsada
 ```
 Example of script launch on Linux, Python 3.5:
 ```bash
