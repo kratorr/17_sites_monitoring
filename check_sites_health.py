@@ -21,9 +21,7 @@ def is_server_respond_with_ok(url):
 def check_domain_expiration_date(domain_name, days=30):
     whois_info = whois.whois(domain_name)
     expiration_date = whois_info.expiration_date
-    if expiration_date is None:
-        pass
-    else:
+    if expiration_date:
         if type(expiration_date) == list:
             expiration_date = min(expiration_date)
         delta_between_2_dates = expiration_date - datetime.datetime.now()
